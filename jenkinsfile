@@ -1,0 +1,13 @@
+pipeline{
+  agent{
+    label 'slave'
+    }
+stages{
+    stage(hello) {
+      steps{
+          sh 'java -version'
+          echo 'hello this is jenkinsfile'
+          sh 'pwd'
+          }
+        }
+}
