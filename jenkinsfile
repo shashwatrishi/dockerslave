@@ -1,13 +1,26 @@
-pipeline{
-  agent{
-    label 'slave'
-    }
-stages{
-    stage(hello) {
-      steps{
-          sh 'java -version'
-          echo 'hello this is jenkinsfile'
-          sh 'pwd'
-          }
+pipeline {
+    // This agent definition tells Jenkins to use the local Docker daemon
+    // to run the entire pipeline inside a specified Docker image.
+    agent {
+        docker {
+            image 'node:16-alpine' // Specify the image with necessary tools (e.g., node, git)
+            label 'docker-agent' // Optional label if you configure a specific cloud agent
+            // Mount the host's Docker socket into the agent container if needed
+            // args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
+    }
+    stages {
+        stage('Build') {
+            steps {
+                // Commands run inside the 'node:16-alpine' container
+                sh 'node --version'
+                sh 'npm install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
+    }
 }
