@@ -19,5 +19,26 @@ pipeline {
                 }
             }
         }
-   }
+   
+        stage('Build Java Application') {
+            steps {
+                // Runs the Maven command to clean and package the application.
+                // Assumes a pom.xml file is in the root directory.
+                // 'sh' runs the command on Linux/macOS agents. Use 'bat' for Windows agents.
+                sh 'mvn clean package -DskipTests'
+            }
+        }
+		
+		stage('Build Docker Image') {
+            steps {
+                // Builds a Docker image using the Dockerfile in the root directory.
+                // The image is tagged with "my-java-app:latest" and the current build number.
+                script {
+                    def app = docker.build("my-java-app:${env.BUILD_NUMBER}")
+                    // Optionally, run the image
+                    // app.run()
+                }
+            }
+        }
+	}	
 }
