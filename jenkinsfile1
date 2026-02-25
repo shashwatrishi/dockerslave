@@ -3,14 +3,18 @@ pipeline {
         docker {
             image 'maven:3.8.1-openjdk-11'
            // label 'docker-agent' // Optional, but useful if multiple templates
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // For "Docker in Docker" scenarios
+           // args '-v /var/run/docker.sock:/var/run/docker.sock' // For "Docker in Docker" scenarios
         }
     }
     stages {
-        stage('Build') {
+        stage('code -checkout') {
             steps {
-                sh 'mvn clean install'
+                script {
+                  git branch: 'main',
+                      credentialsId: 'PAT jenkins',
+                      url: 'https://github.com/shashwatrishi/Java-Mysql-Simple-Login-Web-application.git'
+                    }
+                }
             }
         }
-    }
-}
+   }
