@@ -27,6 +27,8 @@ pipeline {
                 // Assumes a pom.xml file is in the root directory.
                 // 'sh' runs the command on Linux/macOS agents. Use 'bat' for Windows agents
                	sh 'ls -al'
+				sh 'cd secondary-repo-dir'
+   				sh 'ls -al'
                 sh 'mvn clean package -DskipTests'
             }
         }
