@@ -10,13 +10,11 @@ pipeline {
         stage('code -checkout') {
             steps {
                 script {
-                dir('secondary-repo-dir') {
-                  git branch: 'main',
-                      credentialsId: 'PAT jenkins',
-                      url: 'https://github.com/shashwatrishi/Java-Mysql-Simple-Login-Web-application.git'
+              //  dir('secondary-repo-dir') {
+                  git branch: 'main', credentialsId: 'PAT jenkins', url: 'https://github.com/shashwatrishi/Java-Mysql-Simple-Login-Web-application.git'
                       sh 'ls -al'
 					  sh 'pwd'
-                    }
+                   // }
                 }
             }
         }
@@ -27,7 +25,7 @@ pipeline {
                 // Assumes a pom.xml file is in the root directory.
                 // 'sh' runs the command on Linux/macOS agents. Use 'bat' for Windows agents
                	sh 'ls -al'
-				sh 'cd secondary-repo-dir'
+				//sh 'cd secondary-repo-dir'
    				sh 'ls -al'
                 sh 'mvn clean package -DskipTests'
             }
