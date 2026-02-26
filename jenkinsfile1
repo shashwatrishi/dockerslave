@@ -26,8 +26,7 @@ pipeline {
                 // Runs the Maven command to clean and package the application.
                 // Assumes a pom.xml file is in the root directory.
                 // 'sh' runs the command on Linux/macOS agents. Use 'bat' for Windows agents
-                sh 'cd secondary-repo-dir
-				sh 'ls -al'
+               	sh 'ls -al'
                 sh 'mvn clean package -DskipTests'
             }
         }
