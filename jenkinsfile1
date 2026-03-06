@@ -42,5 +42,16 @@ pipeline {
                 }
             }
         }
+		 stage('Push Docker Image') {
+            steps {
+                script {
+                    //	Pushes the image to the specified registry using stored credentials
+                    	docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDENTIAL_ID) {
+                        dockerImage.push()
+                        dockerImage.push('latest') // Optional: also tag as 'latest'
+                    }
+				}
+			}
+		}
 	}	
 }
