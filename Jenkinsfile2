@@ -14,7 +14,7 @@ pipeline {
             agent any
             steps {
                 git branch: 'main',
-                credentialsId: 'PAT jenkins',
+                credentialsId: 'PAT_jenkins',
                 url: 'https://github.com/shashwatrishi/Java-Mysql-Simple-Login-Web-application.git'
 
                 sh 'ls -al'
