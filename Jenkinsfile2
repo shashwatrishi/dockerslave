@@ -1,46 +1,69 @@
+
 pipeline {
-    agent any
+    agent none
 
     environment {
-        REGISTRY = "docker.io"
         IMAGE_NAME = "shashwatrishi/my-java-app"
+        REGISTRY = "https://index.docker.io/v1/"
         REGISTRY_CREDENTIAL_ID = "dockerhub-creds"
     }
 
     stages {
 
         stage('Checkout Code') {
+            agent any
             steps {
                 git branch: 'main',
                 credentialsId: 'PAT jenkins',
                 url: 'https://github.com/shashwatrishi/Java-Mysql-Simple-Login-Web-application.git'
+
+                sh 'ls -al'
             }
         }
 
-        stage('Build Java Application') {
+        stage('Build Java Application (Maven Container)') {
+            agent {
+                docker {
+                    image 'maven:3.8.1-openjdk-11'
+                    reuseNode true
+                }
+            }
             steps {
                 sh 'mvn clean package -DskipTests'
+                sh 'ls -al target'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Docker Image (Jenkins Host)') {
+            agent any
             steps {
                 script {
-                    dockerImage = docker.build("${IMAGE_NAME}:${BUILD_NUMBER}")
+                    dockerImage = docker.build("${IMAGE_NAME}:${env.BUILD_NUMBER}")
                 }
             }
         }
 
         stage('Push Docker Image') {
+            agent any
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDENTIAL_ID) {
-                        dockerImage.push("${BUILD_NUMBER}")
+                    docker.withRegistry("${REGISTRY}", "${REGISTRY_CREDENTIAL_ID}") {
+
+                        dockerImage.push("${env.BUILD_NUMBER}")
                         dockerImage.push("latest")
+
                     }
                 }
             }
         }
+    }
 
+    post {
+        success {
+            echo "Pipeline completed successfully"
+        }
+        failure {
+            echo "Pipeline failed"
+        }
     }
 }
