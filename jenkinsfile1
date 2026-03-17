@@ -1,12 +1,14 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.8.1-openjdk-11'
-           // label 'docker-agent' // Optional, but useful if multiple templates
-           // args '-v /var/run/docker.sock:/var/run/docker.sock' // For "Docker in Docker" scenarios
-        }
+    agent none
+
+    environment {
+        IMAGE_NAME = "shashwatrishi/my-java-app"
+        REGISTRY = "https://index.docker.io/v1/"
+        REGISTRY_CREDENTIAL_ID = "dockerhub-creds"
     }
+
     stages {
+		agent any
         stage('code -checkout') {
             steps {
                 script {
@@ -20,7 +22,13 @@ pipeline {
         }
    
         stage('Build Java Application') {
-            steps {
+            agent {
+                docker {
+                    image 'maven:3.8.1-openjdk-11'
+                    reuseNode true
+                }
+            }
+			steps {
                 // Runs the Maven command to clean and package the application.
                 // Assumes a pom.xml file is in the root directory.
                 // 'sh' runs the command on Linux/macOS agents. Use 'bat' for Windows agents
@@ -32,6 +40,7 @@ pipeline {
         }
 		
 		stage('Build Docker Image') {
+			 agent any
             steps {
                 // Builds a Docker image using the Dockerfile in the root directory.
                 // The image is tagged with "my-java-app:latest" and the current build number.
@@ -43,7 +52,8 @@ pipeline {
             }
         }
 		 stage('Push Docker Image') {
-            steps {
+            agent any
+			steps {
                 script {
                     //	Pushes the image to the specified registry using stored credentials
                     	docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDENTIAL_ID) {
