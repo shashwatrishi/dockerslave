@@ -9,13 +9,16 @@ pipeline {
     }
 
     stages {
-
-        stage('Checkout Code') {
-            agent any
+		agent any
+        stage('code -checkout') {
             steps {
-               git branch: 'main', credentialsId: 'PAT jenkins', url: 'https://github.com/shashwatrishi/Java-Mysql-Simple-Login-Web-application.git'
-                sh 'ls -al'
-                sh 'pwd'
+                script {
+              //  dir('secondary-repo-dir') {
+                  git branch: 'main', credentialsId: 'PAT jenkins', url: 'https://github.com/shashwatrishi/Java-Mysql-Simple-Login-Web-application.git'
+                      sh 'ls -al'
+					  sh 'pwd'
+                   // }
+                }
             }
         }
 
