@@ -10,7 +10,12 @@ pipeline {
     stages {
 		
         stage('code -checkout') {
-			agent any
+			  agent {
+                docker {
+                    image 'maven:3.8.1-openjdk-11'
+                    reuseNode true
+                }
+            }
             steps {
                 script {
               //  dir('secondary-repo-dir') {
@@ -23,12 +28,7 @@ pipeline {
         }
    
         stage('Build Java Application') {
-            agent {
-                docker {
-                    image 'maven:3.8.1-openjdk-11'
-                    reuseNode true
-                }
-            }
+          
 			steps {
                 // Runs the Maven command to clean and package the application.
                 // Assumes a pom.xml file is in the root directory.
@@ -41,7 +41,7 @@ pipeline {
         }
 		
 		stage('Build Docker Image') {
-			 agent any
+			agent any
             steps {
                 // Builds a Docker image using the Dockerfile in the root directory.
                 // The image is tagged with "my-java-app:latest" and the current build number.
