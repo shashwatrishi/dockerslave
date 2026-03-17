@@ -29,7 +29,7 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'ls -al'
-               // sh 'cd /secondary-repo-dir/'
+                sh 'cd /secondary-repo-dir'
                 sh 'pwd'
                 sh 'ls-al'
                 
