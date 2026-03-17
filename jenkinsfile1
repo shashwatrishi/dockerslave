@@ -10,6 +10,7 @@ pipeline {
     stages {
 		agent any
         stage('code -checkout') {
+			agent any
             steps {
                 script {
               //  dir('secondary-repo-dir') {
