@@ -30,11 +30,11 @@ pipeline {
                 sh 'pwd'
                 sh 'ls -al'
                 sh 'cd secondary-repo-dir'
+                sh 'ls -al'
                 sh 'pwd'
-                sh 'ls-al'
-                
+                sh 'ls -al'
                 sh 'mvn clean package -DskipTests'
-                sh 'ls -al target'
+               // sh 'ls -al target'
             }
         }
 
