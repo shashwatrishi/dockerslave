@@ -13,11 +13,9 @@ pipeline {
         stage('Checkout Code') {
             agent any
             steps {
-                git branch: 'main',
-                credentialsId: 'PAT_jenkins',
-                url: 'https://github.com/shashwatrishi/Java-Mysql-Simple-Login-Web-application.git'
-
+               git branch: 'main', credentialsId: 'PAT jenkins', url: 'https://github.com/shashwatrishi/Java-Mysql-Simple-Login-Web-application.git'
                 sh 'ls -al'
+                sh 'pwd'
             }
         }
 
