@@ -27,6 +27,11 @@ pipeline {
                 }
             }
             steps {
+                sh 'pwd'
+
+                sh 'cd secondary-repo-dir'
+                sh 'pwd'
+                sh '
                 sh 'mvn clean package -DskipTests'
                 sh 'ls -al target'
             }
